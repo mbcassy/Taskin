@@ -9,6 +9,7 @@
 import UIKit
 import CoreData
 
+
 class ToDoListViewController: UITableViewController, UISearchBarDelegate {
     @IBOutlet weak var searchBar: UISearchBar!
     var taskArray = [Task]()
