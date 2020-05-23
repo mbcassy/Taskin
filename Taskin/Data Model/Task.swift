@@ -12,5 +12,6 @@ import RealmSwift
 class Task: Object {
     @objc dynamic var title: String = ""
     @objc dynamic var completed: Bool = false
+    @objc dynamic var dateCreated: Date?
     var inGroup = LinkingObjects(fromType: Group.self, property: "tasks")
 }

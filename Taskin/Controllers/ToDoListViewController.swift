@@ -35,6 +35,7 @@ class ToDoListViewController: UITableViewController, UISearchBarDelegate {
                         try self.realm.write {
                             let newTask = Task()
                             newTask.title = text
+                            newTask.dateCreated = Date()
                             currentGroup.tasks.append(newTask)
                         }
                     } catch {
@@ -96,16 +97,7 @@ class ToDoListViewController: UITableViewController, UISearchBarDelegate {
     //MARK: - UISearchBar Delegate Methods
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-//        let request: NSFetchRequest<Task> = Task.fetchRequest()
-//        request.predicate = NSPredicate(format: "title CONTAINS[cd] %@", searchBar.text!)
-//        request.sortDescriptors = [NSSortDescriptor(key: "title", ascending: true)]
-//        loadData(with: request)
-        do {
-            //taskList = try context.fetch(request)
-        } catch {
-            // do something on error
-        }
-        
+        taskList = taskList?.filter("title CONTAINS[cd] %@", searchBar.text!).sorted(byKeyPath: "dateCreated", ascending: true)
         tableView.reloadData()
     }
     
