@@ -7,13 +7,12 @@
 //
 
 import UIKit
-import CoreData
-
+import RealmSwift
 
 class ToDoListViewController: UITableViewController, UISearchBarDelegate {
     @IBOutlet weak var searchBar: UISearchBar!
-    var taskArray = [Task]()
-    let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+    let realm = try! Realm()
+    var taskList: Results<Task>?
     var selectedGroup: Group? {
         didSet {
             loadData()
@@ -30,19 +29,20 @@ class ToDoListViewController: UITableViewController, UISearchBarDelegate {
         var addTaskTextField = UITextField()
         let alert = UIAlertController(title: "Enter a new Task.", message: "", preferredStyle: .alert)
         let addTaskAction = UIAlertAction(title: "Add", style: .default) { (action) in
-            //this is what happens after add task is clicked
-            if let text = addTaskTextField.text {
+            if let text = addTaskTextField.text, let currentGroup = self.selectedGroup {
                 if text != "" {
-                    let newTask = Task(context: self.context)
-                    newTask.title = text
-                    newTask.completed = false
-                    newTask.inCategory = self.selectedGroup
-                    self.taskArray.append(newTask)
-                    self.saveData()
-                } else {
-                    // prompt again?
+                    do {
+                        try self.realm.write {
+                            let newTask = Task()
+                            newTask.title = text
+                            currentGroup.tasks.append(newTask)
+                        }
+                    } catch {
+                        // handle error
+                    }
                 }
             }
+            self.tableView.reloadData()
         }
         alert.addTextField { (textfield) in
             textfield.placeholder = "Enter a new Task."
@@ -54,63 +54,54 @@ class ToDoListViewController: UITableViewController, UISearchBarDelegate {
     
     //MARK: - TableView Data Source Methods
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return taskArray.count
+        return taskList?.count ?? 1
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "TaskCell", for: indexPath)
-        let task = taskArray[indexPath.row]
-        cell.textLabel?.text = task.title
-        cell.accessoryType = (task.completed) ? .checkmark : .none
+        if let task = taskList?[indexPath.row] {
+            cell.textLabel?.text = task.title
+            cell.accessoryType = (task.completed) ? .checkmark : .none
+        } else {
+            cell.textLabel?.text = ""
+        }
         return cell
     }
     
     //MARK: - TableView Delegate Methods
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        taskArray[indexPath.row].completed = !taskArray[indexPath.row].completed
-        saveData()
-        tableView.deselectRow(at: indexPath, animated: true)
-    }
-    
-    //MARK: - Data Model Methods
-    
-    func saveData(){
-        do {
-            try context.save()
-        } catch {
-            // do something on error
+        if let task = taskList?[indexPath.row] {
+            do {
+                try realm.write {
+                    //realm.delete(task)
+                    task.completed = !task.completed
+                }
+            } catch {
+                // handle error
+            }
         }
         
         tableView.reloadData()
+        tableView.deselectRow(at: indexPath, animated: true)
     }
     
-    func loadData(with request: NSFetchRequest<Task> = Task.fetchRequest(), predicate: NSPredicate? = nil){
-        let groupPredicate = NSPredicate(format: "inCategory.name MATCHES %@", selectedGroup!.name!)
-        
-        if let predicate = predicate {
-            request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [groupPredicate, predicate])
-        } else {
-            request.predicate = groupPredicate
-        }
-        
-        do {
-            taskArray = try context.fetch(request)
-        } catch {
-            // do something on error
-        }
+    //MARK: - Realm CRUD Methods
+    
+    func loadData(){
+        taskList = selectedGroup?.tasks.sorted(byKeyPath: "title", ascending: true)
         tableView.reloadData()
     }
     
     //MARK: - UISearchBar Delegate Methods
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        let request: NSFetchRequest<Task> = Task.fetchRequest()
-        request.predicate = NSPredicate(format: "title CONTAINS[cd] %@", searchBar.text!)
-        request.sortDescriptors = [NSSortDescriptor(key: "title", ascending: true)]
-        loadData(with: request)
+//        let request: NSFetchRequest<Task> = Task.fetchRequest()
+//        request.predicate = NSPredicate(format: "title CONTAINS[cd] %@", searchBar.text!)
+//        request.sortDescriptors = [NSSortDescriptor(key: "title", ascending: true)]
+//        loadData(with: request)
         do {
-            taskArray = try context.fetch(request)
+            //taskList = try context.fetch(request)
         } catch {
             // do something on error
         }

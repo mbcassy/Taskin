@@ -7,11 +7,11 @@
 //
 
 import UIKit
-import CoreData
+import RealmSwift
 
 class GroupTableViewController: UITableViewController {
-    let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
-    var categories = [Group]()
+    let realm = try! Realm()
+    var groups: Results<Group>?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -24,10 +24,9 @@ class GroupTableViewController: UITableViewController {
         let addAction = UIAlertAction(title: "Add", style: .default) { action in
             if let text = addCategoryTextField.text {
                 if text != "" {
-                    let newCategory = Group(context: self.context)
-                    newCategory.name = text
-                    self.categories.append(newCategory)
-                    self.saveData()
+                    let newGroup = Group()
+                    newGroup.name = text
+                    self.save(group: newGroup)
                 } else {
                     // prompt again?
                 }
@@ -46,12 +45,12 @@ class GroupTableViewController: UITableViewController {
     //MARK:- TableView Data Source Methods
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return categories.count
+        return groups?.count ?? 1
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "CategoryCell", for: indexPath)
-        cell.textLabel?.text = categories[indexPath.row].name
+        cell.textLabel?.text = groups?[indexPath.row].name
         return cell
     }
     
@@ -64,27 +63,25 @@ class GroupTableViewController: UITableViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         let destination = segue.destination as! ToDoListViewController
         if let indexPath = tableView.indexPathForSelectedRow {
-            destination.selectedGroup = categories[indexPath.row]
+            destination.selectedGroup = groups?[indexPath.row]
         }
     }
     
-    //MARK:- Data Model Methods
+    //MARK:- Realm CRUD Methods
     
-    func saveData(){
+    func save(group: Group) {
         do {
-            try context.save()
+            try realm.write {
+                realm.add(group)
+            }
         } catch {
             // handle error
         }
         tableView.reloadData()
     }
     
-    func loadData(with request: NSFetchRequest<Group> = Group.fetchRequest()){
-        do {
-            categories = try context.fetch(request)
-        } catch {
-            // handle error
-        }
+    func loadData(){
+        groups = realm.objects(Group.self)
         tableView.reloadData()
     }
 }
