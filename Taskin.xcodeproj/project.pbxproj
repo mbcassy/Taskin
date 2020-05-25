@@ -10,6 +10,7 @@
 		5BD7AF0DFFF68B63AC1D92A7 /* Pods_Taskin.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C35295E2EA9FF922F006572B /* Pods_Taskin.framework */; };
 		E5663CEB2479A8CD002FA875 /* Task.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5663CEA2479A8CD002FA875 /* Task.swift */; };
 		E5663CED2479A8D8002FA875 /* Group.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5663CEC2479A8D8002FA875 /* Group.swift */; };
+		E57927EB247C6A5C00C8287A /* SwipeTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E57927EA247C6A5C00C8287A /* SwipeTableViewController.swift */; };
 		E58CF85324787D1300AF69D8 /* GroupTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E58CF85224787D1300AF69D8 /* GroupTableViewController.swift */; };
 		E5F123C624746A5200B50BE7 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5F123C524746A5200B50BE7 /* AppDelegate.swift */; };
 		E5F123C824746A5200B50BE7 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5F123C724746A5200B50BE7 /* SceneDelegate.swift */; };
@@ -25,6 +26,7 @@
 		C35295E2EA9FF922F006572B /* Pods_Taskin.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Taskin.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E5663CEA2479A8CD002FA875 /* Task.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Task.swift; sourceTree = "<group>"; };
 		E5663CEC2479A8D8002FA875 /* Group.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Group.swift; sourceTree = "<group>"; };
+		E57927EA247C6A5C00C8287A /* SwipeTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwipeTableViewController.swift; sourceTree = "<group>"; };
 		E58CF85224787D1300AF69D8 /* GroupTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupTableViewController.swift; sourceTree = "<group>"; };
 		E5F123C224746A5200B50BE7 /* Taskin.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Taskin.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E5F123C524746A5200B50BE7 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -65,18 +67,19 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		E58141162475BA6400CF43E2 /* Data Model */ = {
+		E58141162475BA6400CF43E2 /* Models */ = {
 			isa = PBXGroup;
 			children = (
 				E5663CEC2479A8D8002FA875 /* Group.swift */,
 				E5663CEA2479A8CD002FA875 /* Task.swift */,
 			);
-			path = "Data Model";
+			path = Models;
 			sourceTree = "<group>";
 		};
 		E58141172475BA7100CF43E2 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				E57927EA247C6A5C00C8287A /* SwipeTableViewController.swift */,
 				E58CF85224787D1300AF69D8 /* GroupTableViewController.swift */,
 				E5F123C924746A5200B50BE7 /* ToDoListViewController.swift */,
 			);
@@ -114,9 +117,9 @@
 			children = (
 				E5F123C524746A5200B50BE7 /* AppDelegate.swift */,
 				E5F123C724746A5200B50BE7 /* SceneDelegate.swift */,
-				E58141172475BA7100CF43E2 /* Controllers */,
-				E58141162475BA6400CF43E2 /* Data Model */,
+				E58141162475BA6400CF43E2 /* Models */,
 				E58141182475BA7A00CF43E2 /* Views */,
+				E58141172475BA7100CF43E2 /* Controllers */,
 				E5F123CE24746A5300B50BE7 /* Assets.xcassets */,
 				E5F123D024746A5300B50BE7 /* LaunchScreen.storyboard */,
 				E5F123D324746A5300B50BE7 /* Info.plist */,
@@ -242,6 +245,7 @@
 				E5663CED2479A8D8002FA875 /* Group.swift in Sources */,
 				E5F123CA24746A5200B50BE7 /* ToDoListViewController.swift in Sources */,
 				E58CF85324787D1300AF69D8 /* GroupTableViewController.swift in Sources */,
+				E57927EB247C6A5C00C8287A /* SwipeTableViewController.swift in Sources */,
 				E5F123C624746A5200B50BE7 /* AppDelegate.swift in Sources */,
 				E5663CEB2479A8CD002FA875 /* Task.swift in Sources */,
 				E5F123C824746A5200B50BE7 /* SceneDelegate.swift in Sources */,

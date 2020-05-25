@@ -9,7 +9,7 @@
 import UIKit
 import RealmSwift
 
-class ToDoListViewController: UITableViewController, UISearchBarDelegate {
+class ToDoListViewController: SwipeTableViewController, UISearchBarDelegate {
     @IBOutlet weak var searchBar: UISearchBar!
     let realm = try! Realm()
     var taskList: Results<Task>?
@@ -59,7 +59,7 @@ class ToDoListViewController: UITableViewController, UISearchBarDelegate {
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "TaskCell", for: indexPath)
+        let cell = super.tableView(tableView, cellForRowAt: indexPath)
         if let task = taskList?[indexPath.row] {
             cell.textLabel?.text = task.title
             cell.accessoryType = (task.completed) ? .checkmark : .none
@@ -92,6 +92,18 @@ class ToDoListViewController: UITableViewController, UISearchBarDelegate {
     func loadData(){
         taskList = selectedGroup?.tasks.sorted(byKeyPath: "title", ascending: true)
         tableView.reloadData()
+    }
+    
+    override func updateModel(at indexPath: IndexPath) {
+        if let task = taskList?[indexPath.row] {
+            do {
+                try realm.write {
+                    realm.delete(task)
+                }
+            } catch {
+                // handle error
+            }
+        }
     }
     
     //MARK: - UISearchBar Delegate Methods

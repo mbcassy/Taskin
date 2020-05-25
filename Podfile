@@ -7,4 +7,5 @@ target 'Taskin' do
 
   # Pods for Taskin
   pod 'RealmSwift'
+  pod 'SwipeCellKit'
 end
